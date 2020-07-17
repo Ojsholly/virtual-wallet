@@ -4,8 +4,50 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "52ba2f7b901e34f553aece003f44ff2e",
+    "content-hash": "5a50b9dc12bdfb0e64146f3c64706f01",
     "packages": [
+        {
+            "name": "binarycabin/laravel-uuid",
+            "version": "1.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/binarycabin/laravel-uuid.git",
+                "reference": "0d1d0179fa3873f089d62065dccbd5eb123c3b77"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/binarycabin/laravel-uuid/zipball/0d1d0179fa3873f089d62065dccbd5eb123c3b77",
+                "reference": "0d1d0179fa3873f089d62065dccbd5eb123c3b77",
+                "shasum": ""
+            },
+            "require": {
+                "webpatser/laravel-uuid": "2.*"
+            },
+            "require-dev": {
+                "phpunit/phpunit": ">5.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "BinaryCabin\\LaravelUUID\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jeff Kilroy",
+                    "email": "jeff@binarycabin.com"
+                }
+            ],
+            "description": "A wrapper for webpatser/laravel-uuid with additional integration",
+            "keywords": [
+                "laravel"
+            ],
+            "time": "2019-03-08T03:06:27+00:00"
+        },
         {
             "name": "dnoegel/php-xdg-base-dir",
             "version": "v0.1.1",
@@ -3619,6 +3661,60 @@
                 }
             ],
             "time": "2020-07-14T19:04:52+00:00"
+        },
+        {
+            "name": "webpatser/laravel-uuid",
+            "version": "2.2.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/webpatser/laravel-uuid.git",
+                "reference": "c87d5c631938edad7aae96d27881e3ea3de23d80"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/webpatser/laravel-uuid/zipball/c87d5c631938edad7aae96d27881e3ea3de23d80",
+                "reference": "c87d5c631938edad7aae96d27881e3ea3de23d80",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "fzaninotto/faker": "1.5.*",
+                "phpunit/phpunit": "4.7.*"
+            },
+            "suggest": {
+                "paragonie/random_compat": "A random_bytes Php 5.x polyfill."
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "aliases": {
+                        "Uuid": "Webpatser\\Uuid\\Uuid"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Webpatser\\Uuid": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Christoph Kempen",
+                    "email": "christoph@downsized.nl"
+                }
+            ],
+            "description": "Class to generate a UUID according to the RFC 4122 standard. Support for version 1, 3, 4 and 5 UUID are built-in.",
+            "homepage": "https://github.com/webpatser/uuid",
+            "keywords": [
+                "UUID RFC4122"
+            ],
+            "time": "2017-09-10T21:34:32+00:00"
         }
     ],
     "packages-dev": [
