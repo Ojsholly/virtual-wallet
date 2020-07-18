@@ -38,4 +38,9 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function wallet()
+    {
+        return $this->hasOne('App\Wallet', 'user_id', 'uuid');
+    }
 }
