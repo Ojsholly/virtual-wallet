@@ -1,0 +1,106 @@
+/* =================================== */
+/*  Basic Style 
+/* =================================== */
+
+body, html {
+height:100%;
+}
+
+body {
+  background: $body-bg;
+  color: $text-color;
+  font-family: $body-font;
+  font-size: 14px;
+  line-height: 22px;
+}
+form {
+  padding: 0;
+  margin: 0;
+  display: inline;
+}
+
+img {
+  vertical-align: inherit;
+}
+a, a:focus {
+  color: $primary-color;
+  @include transition(all .2s ease);
+}
+a:hover, a:active {
+    color: $primary-color-hover;
+    text-decoration: none;
+    @include transition(all .2s ease);
+}
+
+a:focus, a:active,
+.btn.active.focus,
+.btn.active:focus,
+.btn.focus,
+.btn:active.focus,
+.btn:active:focus,
+.btn:focus,
+button:focus,
+button:active{
+	outline: none;
+}
+
+p {
+  line-height: 1.9;
+}
+
+blockquote {
+  border-left: 5px solid #eee;
+  padding: 10px 20px;
+}
+
+iframe {
+  border: 0 !important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: $title-color;
+  font-family: $title-font;
+}
+
+.lead {
+  font-size: 1.3em;
+  line-height: 1.8;
+}
+
+/*-------- Preloader --------*/
+#preloader {
+  position: fixed;
+  z-index: 999999999 !important;
+  background-color: #fff;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  [data-loader="dual-ring"]{
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: 50px;
+	height: 50px;
+	margin-left: -25px;
+	margin-top: -25px;
+	display: inline-block;
+	content: " ";
+	display: block;
+	margin: 1px;
+	border-radius: 50%;
+	border: 5px solid $primary-color;
+	border-color: $primary-color transparent $primary-color transparent;
+	animation: dual-ring 1.2s linear infinite;
+  }
+}
+@keyframes dual-ring {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
