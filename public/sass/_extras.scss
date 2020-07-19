@@ -1,0 +1,299 @@
+/* =================================== */
+/*  Extras
+/* =================================== */
+
+/* Bootstrap Specific */
+
+.form-control, .custom-select {
+  border-color: #dae1e3;
+  font-size: 16px;
+  color: #656565;
+}
+
+.form-control:not(.form-control-sm) {
+  padding: .810rem .96rem;
+  height:inherit;
+}
+
+.form-control-sm{font-size:14px;}
+
+.icon-inside {
+  position: absolute;
+  right: 15px;
+  top: calc(50% - 11px);
+  pointer-events: none;
+  font-size: 18px;
+  font-size: 1.125rem;
+  color: #c4c3c3;
+  z-index:3;
+}
+.form-control-sm + .icon-inside {
+  font-size: 0.875rem !important;
+  font-size: 14px;
+  top: calc(50% - 13px);
+}
+
+select.form-control:not([size]):not([multiple]):not(.form-control-sm) {
+  height: auto;
+  padding-top: .700rem;
+  padding-bottom: .700rem;
+}
+.custom-select:not(.custom-select-sm){
+  height:calc(3.05rem + 2px);
+  padding-top: .700rem;
+  padding-bottom: .700rem;}
+.col-form-label-sm{font-size:13px;}
+.custom-select-sm{padding-left:5px!important; font-size:14px;}
+.custom-select:not(.custom-select-sm).border-0{height:3.00rem;}
+
+.form-control:focus, .custom-select:focus{
+  @include box-shadow(0 0 5px rgba(128, 189, 255, 0.5));
+}
+.form-control:focus[readonly]{box-shadow:none;}
+
+.input-group-text {
+  border-color: #dae1e3;
+  background-color:#f1f5f6;
+  color: #656565;
+}
+
+.form-control {
+  &::-webkit-input-placeholder {
+    color: #b1b4b6;
+  }
+  &:-moz-placeholder {
+    /* FF 4-18 */
+    color: #b1b4b6;
+  }
+  &::-moz-placeholder {
+    /* FF 19+ */
+    color: #b1b4b6;
+  }
+  &:-ms-input-placeholder, &::-ms-input-placeholder {
+    /* IE 10+ */
+    color: #b1b4b6;
+  }
+}
+
+.btn {
+  padding: .8rem 2rem;
+  font-weight:500;
+  @include transition(all .5s ease);
+}
+
+.btn-sm {
+  padding: 0.5rem 1rem;
+}
+
+.btn:not(.btn-link) {
+  @include box-shadow(0px 5px 15px rgba(0, 0, 0, 0.15));
+  &:hover {
+	@include box-shadow(0px 5px 15px rgba(0, 0, 0, 0.3));
+	@include transition(all .5s ease);
+  }
+}
+
+.input-group-append .btn, .input-group-prepend .btn {
+  @include box-shadow(none);
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+}
+
+.input-group-append .btn:hover, .input-group-prepend .btn:hover {
+  @include box-shadow(none);
+}
+
+@media (max-width: 575px) {
+  .btn:not(.btn-sm){
+    padding: .810rem 1rem;
+  }
+  .input-group > {
+  .input-group-append > .btn, .input-group-prepend > .btn {
+    padding: 0 0.75rem;
+  }
+}
+}
+
+.bg-primary, .badge-primary {
+	background-color: $primary-color !important;
+}
+.bg-secondary {
+	background-color: $secondary-color !important;
+}
+
+.text-primary, .btn-light, .btn-outline-light:hover, .btn-link {
+	color: $primary-color !important;
+}
+
+.btn-link:hover {
+	color: $primary-color-hover !important;
+}
+.text-secondary{
+	color: $secondary-color !important;
+}
+.text-muted{
+	color:#8e9a9d!important;
+}
+.text-light{
+	color:#dee3e4!important;
+}
+.text-body{
+	color: $text-color !important;
+}
+a.bg-primary:focus, a.bg-primary:hover, button.bg-primary:focus, button.bg-primary:hover{background-color: $primary-color-hover!important;}
+
+.border-primary {
+	border-color: $primary-color !important;
+}
+.border-secondary {
+	border-color: $secondary-color !important;
+}
+
+.btn-primary{
+  background-color: $primary-color;
+  border-color: $primary-color;
+  &:hover {
+    background-color: $primary-color-hover;
+    border-color: $primary-color-hover;
+  }
+}
+
+.btn-primary:not(:disabled):not(.disabled).active, .btn-primary:not(:disabled):not(.disabled):active{
+  background-color: $primary-color-hover;
+  border-color: $primary-color-hover;
+  &:hover {
+    background-color: $primary-color;
+    border-color: $primary-color;
+  }
+}
+
+.btn-secondary {
+  background-color: $secondary-color;
+  border-color: $secondary-color;
+}
+.btn-outline-primary, .btn-outline-primary:not(:disabled):not(.disabled).active, .btn-outline-primary:not(:disabled):not(.disabled):active{
+  color: $primary-color;
+  border-color: $primary-color;
+  &:hover {
+    background-color: $primary-color;
+    border-color: $primary-color;
+	color: #fff;
+  }
+}
+
+.btn-outline-secondary{
+  color: $secondary-color;
+  border-color: $secondary-color;
+  &:hover {
+    background-color: $secondary-color;
+    border-color: $secondary-color;
+	color: #fff;
+  }
+}
+
+.progress-bar,
+.nav-pills .nav-link.active, .nav-pills .show > .nav-link, .dropdown-item.active, .dropdown-item:active{
+	background-color: $primary-color;
+}
+.page-item.active .page-link,
+.custom-radio .custom-control-input:checked ~ .custom-control-label:before,
+.custom-control-input:checked ~ .custom-control-label::before,
+.custom-checkbox .custom-control-input:checked ~ .custom-control-label:before,
+.custom-control-input:checked ~ .custom-control-label:before{
+	background-color: $primary-color;
+	border-color: $primary-color;
+}
+.list-group-item.active{background-color: $primary-color; border-color: $primary-color;}
+.page-link {
+  color: $primary-color;
+  &:hover {
+    color: $primary-color-hover;
+  }
+}
+
+/* Pagination */
+
+.page-link {
+  border: none;
+  border-radius: 0.25rem;
+  margin: 0 0.22rem;
+  font-size: 16px;
+  font-size: 1rem;
+  &:hover {
+    background-color: #e9eff0;
+  }
+}
+
+/* Vertical Multilple input group */
+
+.vertical-input-group .input-group {
+  &:first-child {
+    padding-bottom: 0;
+    * {
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+  }
+  &:last-child {
+    padding-top: 0;
+    * {
+      border-top-left-radius: 0;
+      border-top-right-radius: 0;
+    }
+  }
+  &:not(:last-child):not(:first-child) {
+    padding-top: 0;
+    padding-bottom: 0;
+    * {
+      border-radius: 0;
+    }
+  }
+  &:not(:first-child) * {
+    border-top: 0;
+  }
+}
+
+/* Slider Range (jQuery UI) */
+.ui-slider-horizontal {
+  height: .2em;
+  margin-left: 11px;
+  margin-right: 11px;
+  .ui-slider-handle {
+    top: -0.7em;
+    margin-left: -.7em;
+    border-radius: 100%;
+    background: #fff;
+    width: 1.5em;
+    height: 1.5em;
+  }
+}
+.ui-slider {
+  &.ui-widget.ui-widget-content {
+    border: none;
+    background: #eee;
+    margin-bottom: 15px;
+  }
+  .ui-widget-header {
+    background: $primary-color;
+  }
+}
+.ui-menu {
+  &.ui-widget.ui-widget-content {
+    box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.176);
+    border: none;
+    overflow: hidden;
+    overflow-y: auto;
+    max-height: 50vh;
+    border-radius: 4px;
+  }
+  .ui-menu-item-wrapper {
+    padding: 6px .75rem 6px .9rem;
+  }
+  &.ui-widget-content .ui-state-active {
+    background: $primary-color;
+    border-color: $primary-color;
+  }
+  .ui-menu-divider {
+    display: none;
+  }
+}

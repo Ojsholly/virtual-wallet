@@ -1,0 +1,115 @@
+/* =================================== */
+/*  Profile
+/* =================================== */
+
+/* Dashboard */
+
+.profile-thumb {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  display: inline-block;
+  .profile-thumb-edit {
+    font-size: 16px;
+    width: 37px;
+    height: 37px;
+    border-radius: 100%;
+    position: absolute;
+    overflow: hidden;
+    bottom: 0px;
+    right: 0;
+    display: -ms-flexbox !important;
+    display: flex !important;
+    -ms-flex-pack: center !important;
+    justify-content: center !important;
+    -ms-flex-align: center !important;
+    align-items: center !important;
+    .custom-file-input {
+      cursor: pointer;
+    }
+  }
+}
+
+.profile-completeness .border {
+  border: 1px solid #ecf1f2 !important;
+}
+
+.transaction-title {
+  background-color: #f1f5f6;
+  border-top: 1px solid #e9eff0;
+  border-bottom: 1px solid #e9eff0;
+}
+
+.transaction-item {
+  border-bottom: 1px solid #e9eff0;
+  &:hover {
+    background-color: #f4f7f8;
+    cursor: pointer;
+  }
+}
+
+.transaction-details {
+  max-width: 620px !important;
+  .modal-content {
+    border: none !important;
+  }
+  .modal-body {
+    padding: 0px !important;
+  }
+}
+
+/* Cards & Bank Accounts*/
+.account-card {
+  position: relative;
+  background: -webkit-linear-gradient(135deg, #6c6c6b, #9e9e9c);
+  background: -moz-linear-gradient(135deg, #6c6c6b, #9e9e9c);
+  background: -o-linear-gradient(135deg, #6c6c6b, #9e9e9c);
+  background: -ms-linear-gradient(135deg, #6c6c6b, #9e9e9c);
+  background: linear-gradient(-45deg, #6c6c6b, #9e9e9c);
+  &.account-card-primary {
+    background: -webkit-linear-gradient(135deg, #0f5e9d, #418fce);
+    background: -moz-linear-gradient(135deg, #0f5e9d, #418fce);
+    background: -o-linear-gradient(135deg, #0f5e9d, #418fce);
+    background: -ms-linear-gradient(135deg, #0f5e9d, #418fce);
+    background: linear-gradient(-45deg, #0f5e9d, #418fce);
+  }
+  .account-card-expire {
+    font-size: 8px;
+    line-height: 10px;
+  }
+  .account-card-overlay {
+    position: absolute;
+    background: rgba(0, 0, 0, 0.85);
+    top: 0px;
+    left: 0px;
+    height: 100%;
+    width: 100%;
+    -ms-flex-align: center;
+    align-items: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    display: -ms-flexbox;
+    display: flex;
+    opacity: 0;
+	@include transition(all .3s ease);
+  }
+  &:hover .account-card-overlay {
+    opacity: 1;
+	@include transition(all .3s ease);
+  }
+}
+
+.account-card-new {
+  background: #f1f5f6;
+  border: 1px solid #ebebeb;
+}
+
+.account-card {
+  .border-left, .border-right {
+    border-color: rgba(250, 250, 250, 0.1) !important;
+  }
+}
+
+.login-signup-page {
+    max-width: 460px;
+}
