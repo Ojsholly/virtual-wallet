@@ -1,0 +1,28 @@
+/* =================================== */
+/*  Layouts
+/* =================================== */
+
+#main-wrapper {
+  background: $wrapper-bg;
+  &.boxed {
+    max-width: 1200px;
+    margin: 0 auto;
+	@include box-shadow(0px 0px 10px rgba(0, 0, 0, 0.1));
+  }
+}
+
+.section {
+  position: relative;
+  padding: 104px 0;
+  padding: 6.5rem 0;
+}
+
+@media only screen and (max-width: 768px) {
+.section {padding: 3.5rem 0;}
+}
+
+@media only screen and (min-width: 1200px) {
+  .container {max-width: 1170px !important;}
+  
+}
+
