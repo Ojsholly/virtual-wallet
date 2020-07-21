@@ -21,8 +21,27 @@ Route::get('/dashboard', 'HomeController@index')->name('home')->middleware('auth
 
 Route::group(['prefix' => 'profile', 'namespace' => 'Profile'], function () {
 
-    Route::get('/view-profile/{id}', 'ProfileController@show')->middleware('auth', 'verified');
+    Route::get('/{id}', 'ProfileController@show')->middleware('auth', 'verified');
 
     Route::get('/edit-profile/{id}', 'ProfileController@edit')->middleware('auth', 'verified');
     Route::put('/edit-profile/{id}', 'ProfileController@update')->middleware('auth', 'verified');
+
+    Route::get('/bank-accounts/{id}', 'ProfileController@bank_accounts')->middleware('auth', 'verified');
+});
+
+Route::group(['prefix' => 'bank-accounts', 'namespace' => 'Account'], function () {
+
+    Route::get('/', 'AccountController@index')->middleware('auth', 'verified');
+    Route::post('/new-account', 'AccountController@store')->middleware('auth', 'verified');
+});
+
+Route::group(['prefix' => 'transactions', 'namespace' => 'Transaction'], function () {
+
+    Route::get('/', 'TransactionController@index')->middleware('auth', 'verified');
+
+    Route::get('/deposit', 'TransactionController@create')->middleware('auth', 'verified');
+
+    Route::get('/transfer', 'TransactionController@transfer');
+
+    Route::get('/status', array('as' =>  'transactions.status', 'uses' => 'TransactionController@status'))->middleware('auth', 'verified');
 });
