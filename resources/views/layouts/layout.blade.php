@@ -22,6 +22,8 @@
 ============================================= -->
     <link rel="stylesheet" type="text/css" href="{{ asset('vendor/bootstrap/css/bootstrap.min.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('vendor/font-awesome/css/all.min.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('vendor/bootstrap-select/css/bootstrap-select.min.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('vendor/currency-flags/css/currency-flags.min.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('css/stylesheet.css') }}" />
 </head>
 
@@ -47,9 +49,33 @@
         <!-- Script -->
         <script src="{{ asset('vendor/jquery/jquery.min.js') }}"></script>
         <script src="{{ asset('vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+        <script src="{{ asset('vendor/bootstrap-select/js/bootstrap-select.min.js') }}"></script>
         <script src="{{ asset('js/theme.js') }}"></script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
         <script>
+            @if(\Request::is('transactions/deposit'))
+
+            function makePayment(amount) {
+                FlutterwaveCheckout({
+                    public_key: "{{ env('RAVE_TEST_PUBLIC_KEY') }}",
+                    tx_ref: "{{ 'VW-'.mt_rand() }}",
+                    amount: amount,
+                    currency: "NGN",
+                    redirect_url: "{{ url('transactions/status') }}",
+                    customer: {
+                        email: "{{ Auth::user()->email }}",
+                        phone_number: "{{ Auth::user()->phone }}",
+                        name: "{{ Auth::user()->first_name.' '.Auth::user()->last_name }}",
+                    },
+                    customizations: {
+                        title: "{{ env('APP_NAME') }}",
+                        description: "Wallet Deposit",
+                        logo: "{{ asset('images/logo.png') }}",
+                    },
+                });
+            }
+            @endif
+
             $('document').ready(function () {
                 @if(Session::has('success'))
                 setTimeout(function () {
@@ -72,6 +98,27 @@
                     }).then((value) => {}).catch(swal.noop)
                 }, 3000);
                 @endif
+
+                $('#deposit-amount').change(function () {
+                    const amount = $('#deposit-amount').val();
+                    if (amount >= 1000) {
+                        $('#deposit-confirmation').html(amount +
+                            " NGN");
+                        $('#payment-btn').removeAttr('disabled');
+
+                    } else {
+                        $('#deposit-confirmation').html('');
+                        $('#payment-btn').attr('disabled', 'disabled');
+                    }
+                });
+
+                $('#payment-btn').click(function (e) {
+                    e.preventDefault();
+
+                    const amount = $('#deposit-amount').val();
+
+                    makePayment(amount);
+                });
 
             });
 
