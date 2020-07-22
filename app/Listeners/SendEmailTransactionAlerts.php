@@ -2,13 +2,15 @@
 
 namespace App\Listeners;
 
-use App\Mail\WelcomeNewUserMail;
+use App\User;
+use App\Mail\TransactionEmailAlert;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class WelcomeNewUserListener
+class SendEmailTransactionAlerts
 {
+
     /**
      * Handle the event.
      *
@@ -18,6 +20,7 @@ class WelcomeNewUserListener
     public function handle($event)
     {
         //
-        Mail::to($event->user->email)->send(new WelcomeNewUserMail($event->user));
+
+        Mail::to($event->recipient->email)->send(new TransactionEmailAlert($event->data));
     }
 }

@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use App\Events\UserTransferSucessFul;
 use App\Events\WalletCreditValidated;
 use Illuminate\Support\Facades\Event;
 use App\Events\WalletCreditFailedValidation;
@@ -210,6 +211,9 @@ class TransactionController extends Controller
             $recipient = $request->recipient;
             $amount = $request->amount;
             $narration = $request->narration;
+
+            $recipient_data = User::where('uuid', $recipient_uuid)->first();
+            // dd($recipient_data->email);
             $data = (object) ['recipient' => $recipient, 'recipient_uuid' => $recipient_uuid, 'amount' => $amount, 'narration' => $narration];
 
             $balance = Auth::user()->wallet->balance;
@@ -220,7 +224,7 @@ class TransactionController extends Controller
 
             if ($balance >= $amount) {
                 # code...
-                DB::transaction(function () use ($balance, $recipient_balance, $data, &$transfer) {
+                DB::transaction(function () use ($balance, $recipient_balance, &$data, &$transfer) {
 
                     $debit = Wallet::where('user_id', Auth::user()->uuid)->update([
                         'balance' => $balance - $data->amount
@@ -247,6 +251,8 @@ class TransactionController extends Controller
 
                 if ($transfer) {
                     # code..
+
+                    event(new UserTransferSucessFul($recipient_data, $data));
 
                     return response()->json(["status" => "1", "msg" => "Transfer Completed Successfully."]);
                 }
