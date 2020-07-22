@@ -1,17 +1,18 @@
 @extends('layouts.layout')
 
-@section('title', 'Deposit')
+@section('title', 'Transfer Money')
 
 @section('content')
+
 
 <!-- Secondary menu
   ============================================= -->
 <div class="bg-white">
     <div class="container d-flex justify-content-center">
         <ul class="nav secondary-nav alternate">
-            <li class="nav-item"> <a class="nav-link active" href="{{ url('transactions/deposit') }}">Deposit</a></li>
+            <li class="nav-item"> <a class="nav-link" href="{{ url('transactions/deposit') }}">Deposit</a></li>
             <li class="nav-item"> <a class="nav-link" href="{{ url('transactions/withdraw') }}">Withdraw</a></li>
-            <li class="nav-item"> <a class="nav-link" href="{{ url('transactions/transfer') }}">Transfer</a></li>
+            <li class="nav-item"> <a class="nav-link active" href="{{ url('transactions/transfer') }}">Transfer</a></li>
             <li class="nav-item"> <a class="nav-link" href="{{ url('transactions/request') }}">Request</a></li>
         </ul>
     </div>
@@ -22,20 +23,34 @@
   ============================================= -->
 <div id="content" class="py-4">
     <div class="container">
-        <h2 class="font-weight-400 text-center mt-3 mb-4">Deposit Money</h2>
+        <h2 class="font-weight-400 text-center mt-3">Send Money</h2>
+        <p class="text-4 text-center mb-4">Send your money to anyone, anywhere in the world.</p>
         <div class="row">
             <div class="col-md-8 col-lg-6 col-xl-5 mx-auto">
                 <div class="bg-light shadow-sm rounded p-3 p-sm-4 mb-4">
-
-                    <!-- Deposit Money Form
+                    <h3 class="text-5 font-weight-400 mb-3">Transaction Details</h3>
+                    <!-- Send Money Form
             ============================================= -->
-                    <form id="form-send-money">
+                    <form action="{{ url('transactions/confirmation') }}" method="post">
+                        @csrf
+                        <div class="form-group">
+                            <label for="emailID">Recipient</label>
+                            <input type="email" required value="" class="form-control flexdatalist"
+                                data-bv-field="emailid" id="recipient-email" name="recipient_email" list="emails"
+                                required placeholder="Enter Email Address of Recipient">
+                            <datalist id="emails">
+                                @foreach($users as $user)
+                                <option value="{{ $user->email }}">{{ $user->email }}</option>
+                                @endforeach
+                            </datalist>
+                        </div>
                         <div class="form-group">
                             <label for="youSend">Amount</label>
                             <div class="input-group">
                                 <div class="input-group-prepend"> <span class="input-group-text">&#8358;</span> </div>
-                                <input type="text" class="form-control" data-bv-field="youSend" id="deposit-amount"
-                                    name="amount" placeholder="Enter Amount">
+                                <input type="number" min="1000" max="{{ Auth::user()->wallet->balance }}" name="amount"
+                                    class="form-control" data-bv-field="youSend" id="transfer-amount" value="1,000"
+                                    placeholder="Amount to Send" step="100">
                                 <div class="input-group-append"> <span class="input-group-text p-0">
                                         <select id="youSendCurrency" data-style="custom-select bg-transparent border-0"
                                             data-container="body" data-live-search="true"
@@ -52,19 +67,18 @@
                                         </select>
                                     </span> </div>
                             </div>
-                            <small><b>Minimun of &#8358;1000</b></small>
+                            <small>Minimum amount is &#8358;1000</small>
                         </div>
-                        <p class="text-muted mt-4">Transactions fees <span
-                                class="float-right d-flex align-items-center"><del>100.00 NGN</del> <span
-                                    class="bg-success text-1 text-white font-weight-500 rounded d-inline-block px-2 line-height-4 ml-2">Free</span></span>
-                        </p>
+                        <div class="form-group">
+                            <label for="youSend">Narration</label>
+                            <div class="input-group">
+                                <textarea name="narration" class="form-control" placeholder="Optional"></textarea>
+                            </div>
+                        </div>
                         <hr>
-                        <p class="font-weight-500">You'll deposit <span class="text-3 float-right"
-                                id="deposit-confirmation"></span>
-                        </p>
-                        <button id="payment-btn" class="btn btn-primary btn-block" disabled>Continue</button>
+                        <button class="btn btn-primary btn-block" id="transfer-confirm-btn" disabled>Continue</button>
                     </form>
-                    <!-- Deposit Money Form end -->
+                    <!-- Send Money Form end -->
                 </div>
             </div>
         </div>
@@ -73,7 +87,5 @@
 <!-- Content end -->
 
 @include('layouts.partials.footer')
-
-<script src="https://checkout.flutterwave.com/v3.js"></script>
 
 @endsection

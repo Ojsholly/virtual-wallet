@@ -2,14 +2,18 @@
 
 namespace App\Http\Controllers\Transaction;
 
+use App\User;
+use App\Wallet;
 use App\Transaction;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Events\WalletCreditValidated;
 use Illuminate\Support\Facades\Event;
 use App\Events\WalletCreditFailedValidation;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class TransactionController extends Controller
 {
@@ -154,6 +158,13 @@ class TransactionController extends Controller
         //
     }
 
+    public function transfer()
+    {
+        $users = User::where('email', '!=', Auth::user()->email)->get();
+
+        return view('transactions.transfer', ['users' => $users]);
+    }
+
     /**
      * Update the specified resource in storage.
      *
@@ -175,5 +186,75 @@ class TransactionController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function confirm(Request $request)
+    {
+        $user = new User();
+
+        $recipient = $user->find_by_email($request->recipient_email);
+
+        $transaction = $request->all();
+
+        $transaction = (object) $transaction;
+
+        return view('transactions.confirmation', ['transaction' => $transaction, 'recipient' => $recipient]);
+    }
+
+    public function transfer_money(Request $request)
+    {
+        if ($request->ajax()) {
+            # code...
+
+            $recipient_uuid = $request->recipient_uuid;
+            $recipient = $request->recipient;
+            $amount = $request->amount;
+            $narration = $request->narration;
+            $data = (object) ['recipient' => $recipient, 'recipient_uuid' => $recipient_uuid, 'amount' => $amount, 'narration' => $narration];
+
+            $balance = Auth::user()->wallet->balance;
+
+            $recipient_balance = User::findByUUID($recipient_uuid)->wallet->balance;
+
+            $transfer = 0;
+
+            if ($balance >= $amount) {
+                # code...
+                DB::transaction(function () use ($balance, $recipient_balance, $data, &$transfer) {
+
+                    $debit = Wallet::where('user_id', Auth::user()->uuid)->update([
+                        'balance' => $balance - $data->amount
+                    ]);
+
+                    if ($debit) {
+                        # code...
+                        $credit = Wallet::where('user_id', $data->recipient_uuid)->update([
+                            'balance' => $recipient_balance + $data->amount
+                        ]);
+
+                        if ($credit) {
+                            # code...
+                            $transfer = 1;
+
+                            return $transfer;
+                        }
+
+                        throw new ModelNotFoundException('Transfer Failed.');
+                    }
+
+                    throw new ModelNotFoundException('Error Transferring Money.');
+                });
+
+                if ($transfer) {
+                    # code..
+
+                    return response()->json(["status" => "1", "msg" => "Transfer Completed Successfully."]);
+                }
+
+                return response()->json(["status" => "0", "msg" => "Error completing Transfer. Please try again later."]);
+            }
+
+            return response()->json(["status" => "0", "msg" => "Insufficient Wallet Balance"]);
+        }
     }
 }

@@ -53,4 +53,9 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasMany('App\Tranasction', 'user_id', 'uuid');
     }
+
+    public function find_by_email($email)
+    {
+        return $this->where('email', $email)->first();
+    }
 }
