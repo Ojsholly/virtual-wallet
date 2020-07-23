@@ -158,6 +158,8 @@
 
                     e.preventDefault();
 
+                    $(this).attr('disabled', 'disabled');
+
                     const recipient = $('#recipient').val();
                     const recipient_uuid = $('#recipient_uuid').val();
                     const amount = $('#amount').val();
@@ -232,6 +234,8 @@
                                     timer: 50000
                                 }).then((value) => {}).catch(swal.noop)
                             }, 1000);
+
+                            $(this).removeAttr('disabled');
                         }
                     });
                 });
@@ -254,6 +258,98 @@
                     var bank_name = $(this).children("option:selected").attr('data-name');
                     $('#bank_name').val('');
                     $('#bank_name').val(bank_name);
+                });
+
+                $('#withdraw-amount').change(function () {
+                    const amount = $('#withdraw-amount').val();
+                    if (amount >= 1000) {
+                        $('#withdraw-btn').removeAttr('disabled');
+                    } else {
+                        $('#withdraw-btn').attr('disabled', 'disabled');
+                    }
+                });
+
+                $('#confirm-withdrawal').click(function (e) {
+                    e.preventDefault();
+
+                    const amount = $('#amount').val();
+                    const account_number = $('#account_number').val();
+                    const account_uuid = $('#account_uuid').val();
+                    const account_bank = $('#account_bank').val();
+                    const account_name = $('#account_name').val();
+
+                    $.ajax({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        url: '{{ url("transactions/withdraw-money") }}',
+                        type: 'POST',
+                        data: {
+                            account_number: account_number,
+                            account_uuid: account_uuid,
+                            amount: amount,
+                            account_bank: account_bank,
+                            account_name: account_name
+                        },
+                        beforeSend: function () {
+                            Swal.fire({
+                                title: 'Processing Withdrawal',
+                                onBeforeOpen: () => {
+                                    Swal.showLoading()
+                                },
+                            });
+                        },
+                        success: function (data) {
+                            //stuff
+                            Swal.close();
+
+                            if (data.status == 1) {
+                                setTimeout(function () {
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'Success!',
+                                        text: data.msg,
+                                        timer: 100000
+                                    }).then((value) => {}).catch(swal.noop)
+                                }, 1000);
+
+                                setTimeout(function () {
+                                    window.location = '{{ url("/dashboard") }}';
+                                }, 5000);
+
+                            } else {
+                                Swal.close()
+                                setTimeout(function () {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Oops!',
+                                        text: data.msg,
+                                        timer: 50000
+                                    }).then((value) => {}).catch(swal.noop)
+                                }, 1000);
+
+                                setTimeout(function () {
+                                    window.location =
+                                        '{{ url("/transactions/withdraw") }}';
+                                }, 500000);
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            //other stuff
+                            Swal.close();
+                            console.log(xhr.responseJSON.message);
+                            setTimeout(function () {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error ' + xhr.status,
+                                    text: xhr.responseJSON.message,
+                                    timer: 50000
+                                }).then((value) => {}).catch(swal.noop)
+                            }, 1000);
+
+                            $(this).removeAttr('disabled');
+                        }
+                    });
                 });
 
             });

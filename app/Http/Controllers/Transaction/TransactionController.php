@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Transaction;
 
 use App\User;
 use App\Wallet;
+use App\Account;
 use App\Transaction;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
@@ -13,7 +14,11 @@ use Illuminate\Support\Facades\Auth;
 use App\Events\UserTransferSucessFul;
 use App\Events\WalletCreditValidated;
 use Illuminate\Support\Facades\Event;
+use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\ConnectException;
+use GuzzleHttp\Exception\RequestException;
 use App\Events\WalletCreditFailedValidation;
+use App\Events\SuccessfulUserWalletWithdrawal;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class TransactionController extends Controller
@@ -215,7 +220,7 @@ class TransactionController extends Controller
             $narration = $request->narration;
 
             $recipient_data = User::where('uuid', $recipient_uuid)->first();
-            // dd($recipient_data->email);
+
             $data = (object) ['recipient' => $recipient, 'recipient_uuid' => $recipient_uuid, 'amount' => $amount, 'narration' => $narration, 'sender' => Auth::user()->first_name . ' ' . Auth::user()->last_name];
 
             $balance = Auth::user()->wallet->balance;
@@ -263,6 +268,141 @@ class TransactionController extends Controller
             }
 
             return response()->json(["status" => "0", "msg" => "Insufficient Wallet Balance"]);
+        }
+    }
+
+    public function Withdraw()
+    {
+        $account = Auth::user()->bank_account;
+
+        if (!$account) {
+            # code...
+            return view('profile.bank-account')->with('fail', 'Kindly save your bank account to continue.');
+        }
+
+        return view('transactions.withdraw', ['account' => $account]);
+    }
+
+    public function confirmation(Request $request)
+    {
+
+        $account_uuid = $request->account_uuid;
+        $amount = $request->amount;
+
+        $account = Account::findByUuid($account_uuid);
+
+        $data = [
+            'amount' => $amount,
+            'account' => $account
+        ];
+
+        $data = (object) $data;
+
+        return view('transactions.confirm-withdrawal', ['data' => $data]);
+    }
+
+    public function withdraw_money(Request $request)
+    {
+        $account_number = $request->account_number;
+        $account_bank = $request->account_bank;
+        $account_uuid = $request->account_uuid;
+        $account_name = $request->account_name;
+        $amount = $request->amount;
+
+        $url = url("transactions/confirm-withdrawal");
+
+        $data = [
+            "account_number" => $account_number,
+            "account_bank" => $account_bank,
+            "amount" => $amount,
+            "narration" => env('APP_NAME') . " Wallet Withdrawal",   // Willed be saved as transaction title
+            "currency" => "NGN",
+            "reference" =>  "_PMCKDU_1VWW-" . mt_rand() . "_PMCKDU_1",
+            "beneficiary_name" =>  $account_name,
+            "callback_url" => $url
+        ];
+
+        $available_balance = Auth::user()->wallet->balance;
+
+        if ($available_balance < $amount) {
+            # code...
+
+            return response()->json(['status' => '0', 'msg' => 'Insufficient Wallet Balance.']);
+        }
+
+        $process_withdrawal = $this->rave_withdrawal($data);
+        $status_code = $process_withdrawal->status_code;
+
+        if ($status_code == 200) {
+            # code...
+            $response = json_decode($process_withdrawal->response);
+            $status = $response->status;
+            $message = $response->message;
+
+            if ($status == 'success' && $message == 'Transfer Queued Successfully') {
+                # code...
+
+                $transfer_id = $response->data->id;
+
+                $amount_withdrawn = $response->data->amount;
+
+                $bank_name = $response->data->bank_name;
+
+                $account_number = $response->data->account_number;
+
+                $txn_ref = $response->data->narration;
+
+                Wallet::where('user_id', Auth::user()->uuid)->update([
+                    'balance' => $available_balance - $amount_withdrawn
+                ]);
+
+                event(new SuccessfulUserWalletWithdrawal($response));
+
+                return response()->json(['status' => '1', 'msg' => 'Withdrawal Completed Successfully']);
+            }
+        }
+    }
+
+    private function rave_withdrawal($data)
+    {
+        $base_url = "https://api.flutterwave.com/v3/transfers";
+
+        $token = env('RAVE_TEST_SECRET_KEY');
+
+        $headers = [
+            'Content-Type'        => 'application/json',
+            'Accept' => 'application/json',
+            'Authorization' => 'Bearer ' . $token
+        ];
+
+        $client = new Client();
+
+        try {
+            //code...
+            $request = $client->post($base_url, [
+                'headers' => $headers,
+                'json' => $data
+            ]);
+
+            $status_code = $request->getStatusCode();
+
+            $response = $request->getBody()->getContents();
+
+            return (object) ['status_code' => $status_code, 'response' =>  $response];
+        } catch (ClientException $e) {
+            if ($e->hasResponse()) {
+                $message = json_decode($e->getResponse()->getBody());
+                $status_code = $e->getResponse()->getStatusCode();
+                return (object) ['status' => $status_code, 'error' => $message];
+            }
+        } catch (ConnectException $e) {
+            return (object) ['status' => 400, 'error' => 'Poor Network Connection.'];
+        } catch (RequestException $e) {
+            if ($e->hasResponse()) {
+                $message = json_decode($e->getResponse()->getBody());
+                $status_code = $e->getResponse()->getStatusCode();
+                return (object) ['status' => $status_code, 'error' => $message];
+            }
         }
     }
 }

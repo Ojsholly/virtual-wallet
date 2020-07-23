@@ -13,7 +13,6 @@
             <li class="nav-item"> <a class="nav-link" href="{{ url('transactions/deposit') }}">Deposit</a></li>
             <li class="nav-item"> <a class="nav-link" href="{{ url('transactions/withdraw') }}">Withdraw</a></li>
             <li class="nav-item"> <a class="nav-link active" href="{{ url('transactions/transfer') }}">Transfer</a></li>
-            <li class="nav-item"> <a class="nav-link" href="{{ url('transactions/request') }}">Request</a></li>
         </ul>
     </div>
 </div>

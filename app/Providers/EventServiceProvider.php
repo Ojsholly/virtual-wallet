@@ -8,6 +8,7 @@ use App\Events\NewUserVerifiesEmail;
 use App\Events\UserTransferSucessFul;
 use App\Events\WalletCreditValidated;
 use Illuminate\Support\Facades\Event;
+use App\Listeners\LogWalletWithdrawal;
 use Illuminate\Auth\Events\Registered;
 use App\Listeners\LogFailedTransaction;
 use App\Mail\DebitTransactionEmailAlert;
@@ -16,6 +17,7 @@ use App\Listeners\LogSucessfulTransaction;
 use App\Listeners\WalletTransactionUpdate;
 use App\Events\WalletCreditFailedValidation;
 use App\Listeners\SendEmailTransactionAlerts;
+use App\Events\SuccessfulUserWalletWithdrawal;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
@@ -44,6 +46,9 @@ class EventServiceProvider extends ServiceProvider
         UserTransferSucessFul::class => [
             SendEmailTransactionAlerts::class,
             LogSucessfulTransaction::class,
+        ],
+        SuccessfulUserWalletWithdrawal::class => [
+            LogWalletWithdrawal::class,
         ],
     ];
 

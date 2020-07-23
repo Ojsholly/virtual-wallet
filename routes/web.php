@@ -48,4 +48,10 @@ Route::group(['prefix' => 'transactions', 'namespace' => 'Transaction'], functio
     Route::get('/status', array('as' =>  'transactions.status', 'uses' => 'TransactionController@status'))->middleware('auth', 'verified');
 
     Route::post('/transfer-money', 'TransactionController@transfer_money')->middleware('auth', 'verified');
+
+    Route::get('/withdraw', 'TransactionController@withdraw')->middleware('auth', 'verified', 'password.confirm');
+
+    Route::post('/withdraw', 'TransactionController@confirmation')->middleware('auth', 'verified');
+
+    Route::post('/withdraw-money', 'TransactionController@withdraw_money')->middleware('auth', 'verified');
 });
