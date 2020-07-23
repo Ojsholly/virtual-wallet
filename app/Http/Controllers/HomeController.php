@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Transaction;
 use Illuminate\Http\Request;
+use App\Events\NewUserVerifiesEmail;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
@@ -22,10 +25,18 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function index()
+    public function index(Request $request)
     {
-        $user = Auth::user();
 
-        return view('dashboard', ['user' => $user]);
+        $wallet = Auth::user()->wallet;
+
+        if (!$wallet) {
+            # code...
+            event(new NewUserVerifiesEmail($request->user()));
+        }
+
+        $transactions = Transaction::where('user_id', Auth::user()->uuid)->latest()->get()->take(7);
+
+        return view('dashboard', ['transactions' => $transactions]);
     }
 }

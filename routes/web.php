@@ -31,8 +31,8 @@ Route::group(['prefix' => 'profile', 'namespace' => 'Profile'], function () {
 
 Route::group(['prefix' => 'bank-accounts', 'namespace' => 'Account'], function () {
 
-    Route::get('/', 'AccountController@index')->middleware('auth', 'verified');
-    Route::post('/new-account', 'AccountController@store')->middleware('auth', 'verified');
+    Route::get('/', 'AccountController@index')->middleware('auth', 'verified', 'password.confirm');
+    Route::post('/save-bank-account', 'AccountController@store')->middleware('auth', 'verified');
 });
 
 Route::group(['prefix' => 'transactions', 'namespace' => 'Transaction'], function () {
@@ -41,7 +41,17 @@ Route::group(['prefix' => 'transactions', 'namespace' => 'Transaction'], functio
 
     Route::get('/deposit', 'TransactionController@create')->middleware('auth', 'verified');
 
-    Route::get('/transfer', 'TransactionController@transfer');
+    Route::get('/transfer', 'TransactionController@transfer')->middleware('auth', 'verified', 'password.confirm');
+
+    Route::post('/confirmation', 'TransactionController@confirm')->middleware('auth', 'verified');
 
     Route::get('/status', array('as' =>  'transactions.status', 'uses' => 'TransactionController@status'))->middleware('auth', 'verified');
+
+    Route::post('/transfer-money', 'TransactionController@transfer_money')->middleware('auth', 'verified');
+
+    Route::get('/withdraw', 'TransactionController@withdraw')->middleware('auth', 'verified', 'password.confirm');
+
+    Route::post('/withdraw', 'TransactionController@confirmation')->middleware('auth', 'verified');
+
+    Route::post('/withdraw-money', 'TransactionController@withdraw_money')->middleware('auth', 'verified');
 });
