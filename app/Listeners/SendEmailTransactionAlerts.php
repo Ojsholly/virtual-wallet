@@ -4,7 +4,9 @@ namespace App\Listeners;
 
 use App\User;
 use App\Mail\TransactionEmailAlert;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
+use App\Mail\DebitTransactionEmailAlert;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
@@ -22,5 +24,7 @@ class SendEmailTransactionAlerts
         //
 
         Mail::to($event->recipient->email)->send(new TransactionEmailAlert($event->data));
+
+        Mail::to(Auth::user()->email)->send(new DebitTransactionEmailAlert($event->data));
     }
 }

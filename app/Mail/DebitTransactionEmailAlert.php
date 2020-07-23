@@ -2,13 +2,12 @@
 
 namespace App\Mail;
 
-use App\User;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Contracts\Queue\ShouldQueue;
 
-class TransactionEmailAlert extends Mailable
+class DebitTransactionEmailAlert extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -23,7 +22,7 @@ class TransactionEmailAlert extends Mailable
     {
         //
         $this->data = $data;
-        $this->subject('New Credit Transaction on Virtual Wallet');
+        $this->subject('New Debit Transaction on Virtual Wallet');
     }
 
     /**
@@ -33,7 +32,6 @@ class TransactionEmailAlert extends Mailable
      */
     public function build()
     {
-
-        return $this->view('emails.credit-transaction')->with(['data' => $this->data]);
+        return $this->view('emails.debit-transaction')->with(['data' => $this->data]);
     }
 }

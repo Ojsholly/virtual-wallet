@@ -10,6 +10,7 @@ use App\Events\WalletCreditValidated;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Auth\Events\Registered;
 use App\Listeners\LogFailedTransaction;
+use App\Mail\DebitTransactionEmailAlert;
 use App\Listeners\WelcomeNewUserListener;
 use App\Listeners\WalletTransactionUpdate;
 use App\Events\WalletCreditFailedValidation;
