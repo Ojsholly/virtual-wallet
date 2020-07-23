@@ -15,10 +15,43 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Auth::routes();
+Auth::routes(['verify' => true]);
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/dashboard', 'HomeController@index')->name('home')->middleware('auth', 'verified');
 
-Auth::routes();
+Route::group(['prefix' => 'profile', 'namespace' => 'Profile'], function () {
 
-Route::get('/home', 'HomeController@index')->name('home');
+    Route::get('/{id}', 'ProfileController@show')->middleware('auth', 'verified');
+
+    Route::get('/edit-profile/{id}', 'ProfileController@edit')->middleware('auth', 'verified');
+    Route::put('/edit-profile/{id}', 'ProfileController@update')->middleware('auth', 'verified');
+
+    Route::get('/bank-accounts/{id}', 'ProfileController@bank_accounts')->middleware('auth', 'verified');
+});
+
+Route::group(['prefix' => 'bank-accounts', 'namespace' => 'Account'], function () {
+
+    Route::get('/', 'AccountController@index')->middleware('auth', 'verified', 'password.confirm');
+    Route::post('/save-bank-account', 'AccountController@store')->middleware('auth', 'verified');
+});
+
+Route::group(['prefix' => 'transactions', 'namespace' => 'Transaction'], function () {
+
+    Route::get('/', 'TransactionController@index')->middleware('auth', 'verified');
+
+    Route::get('/deposit', 'TransactionController@create')->middleware('auth', 'verified');
+
+    Route::get('/transfer', 'TransactionController@transfer')->middleware('auth', 'verified', 'password.confirm');
+
+    Route::post('/confirmation', 'TransactionController@confirm')->middleware('auth', 'verified');
+
+    Route::get('/status', array('as' =>  'transactions.status', 'uses' => 'TransactionController@status'))->middleware('auth', 'verified');
+
+    Route::post('/transfer-money', 'TransactionController@transfer_money')->middleware('auth', 'verified');
+
+    Route::get('/withdraw', 'TransactionController@withdraw')->middleware('auth', 'verified', 'password.confirm');
+
+    Route::post('/withdraw', 'TransactionController@confirmation')->middleware('auth', 'verified');
+
+    Route::post('/withdraw-money', 'TransactionController@withdraw_money')->middleware('auth', 'verified');
+});

@@ -1,0 +1,270 @@
+/* =================================== */
+/*  Footer
+/* =================================== */
+
+#footer {
+  background: #fff;
+  color: #252b33;
+  padding: 66px 0px;
+  padding: 4.125rem 0;
+  border-top: 1px solid #ecf3f5;
+  .nav {
+    .nav-item {
+      display: inline-block;
+      line-height: 12px;
+      margin: 0;
+      padding: 0 10px;
+      &:first-child {
+        padding-left: 0px;
+      }
+      &:last-child {
+        padding-right: 0px;
+      }
+      .nav-link {
+        padding: 0;
+        margin: 0.5rem 0px;
+        color: #252b33;
+        -webkit-transition: all 0.2s ease;
+        transition: all 0.2s ease;
+        &:focus {
+          color: $primary-color;
+          -webkit-transition: all 0.2s ease;
+          transition: all 0.2s ease;
+        }
+      }
+    }
+    .nav-link:hover {
+      color: $primary-color;
+      -webkit-transition: all 0.2s ease;
+      transition: all 0.2s ease;
+    }
+  }
+  .footer-copyright {
+    border-top: 1px solid #e2e8ea;
+    padding: 0px 0px;
+    color: #67727c;
+    .nav {
+      .nav-item .nav-link {
+        color: #67727c;
+      }
+      .nav-link:hover {
+        color: $primary-color;
+        -webkit-transition: all 0.2s ease;
+        transition: all 0.2s ease;
+      }
+    }
+  }
+  .nav.flex-column .nav-item {
+    padding: 0px;
+    .nav-link {
+      margin: 0.7rem 0px;
+    }
+  }
+  &.footer-text-light {
+    color: rgba(250, 250, 250, 0.8);
+    .nav .nav-item .nav-link {
+      color: rgba(250, 250, 250, 0.8);
+      &:hover {
+        color: rgba(250, 250, 250, 1);
+      }
+    }
+    .footer-copyright {
+      border-color: rgba(250, 250, 250, 0.15);
+      color: rgba(250, 250, 250, 0.5);
+    }
+    &:not(.bg-primary) .social-icons-light.social-icons li a {
+      color: rgba(250, 250, 250, 0.8);
+      &:hover {
+        color: rgba(250, 250, 250, 1);
+      }
+    }
+    &.bg-primary {
+      color: #fff;
+      .nav .nav-item .nav-link {
+        color: #fff;
+        &:hover {
+          color: rgba(250, 250, 250, 0.7);
+        }
+      }
+      .footer-copyright {
+        border-color: rgba(250, 250, 250, 0.15);
+        color: rgba(250, 250, 250, 0.9);
+      }
+      :not(.social-icons) a {
+        color: #fff;
+        &:hover {
+          color: rgba(250, 250, 250, 0.7);
+        }
+      }
+    }
+  }
+}
+
+/* Newsleter */
+.newsletter {
+  .form-control {
+    height: 38px!important;
+    font-size: 14px;
+  }
+  .btn {
+    height: 38px;
+    padding-top: 0;
+    padding-bottom: 0px;
+    font-size: 14px;
+  }
+}
+
+/* Social Icons */
+.social-icons {
+  margin: 0;
+  padding: 0;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  list-style: none;
+  li {
+    margin: 0px 6px 4px;
+    padding: 0;
+    overflow: visible;
+    &:last-child {
+      margin-right: 0px;
+    }
+    a {
+      display: block;
+      height: 26px;
+      line-height: 26px;
+      width: 26px;
+      font-size: 18px;
+      text-align: center;
+      color: #4d555a;
+      text-decoration: none;
+	  @include transition(all 0.2s ease);
+    }
+    i {
+      line-height: inherit;
+    }
+  }
+  &.social-icons-sm li{
+    margin: 0px 4px 4px;
+  }
+  &.social-icons-sm li a {
+    font-size: 14px;
+  }
+  &.social-icons-lg li a {
+    width: 34px;
+    height: 34px;
+    line-height:34px;
+    font-size: 22px;
+  }
+  &.social-icons-light li a {
+    color: #eee;
+  }
+  li:hover {
+    a {
+      color: #999;
+    }
+  }
+  li:hover.social-icons-twitter a, &.social-icons-colored li.social-icons-twitter a {
+    color: $twitter;
+  }
+  li:hover.social-icons-facebook a, &.social-icons-colored li.social-icons-facebook a {
+    color: $facebook;
+  }
+  li:hover.social-icons-linkedin a, &.social-icons-colored li.social-icons-linkedin a {
+    color: $linkedin;
+  }
+  li:hover.social-icons-rss a, &.social-icons-colored li.social-icons-rss a {
+    color: $rss;
+  }
+  li:hover.social-icons-google a, &.social-icons-colored li.social-icons-google a {
+    color: $google;
+  }
+  li:hover.social-icons-pinterest a, &.social-icons-colored li.social-icons-pinterest a {
+    color: $pinterest;
+  }
+  li:hover.social-icons-youtube a, &.social-icons-colored li.social-icons-youtube a {
+    color: $youtube;
+  }
+  li:hover.social-icons-instagram a, &.social-icons-colored li.social-icons-instagram a {
+    color: $instagram;
+  }
+  li:hover.social-icons-skype a, &.social-icons-colored li.social-icons-skype a {
+    color: $skype;
+  }
+  li:hover.social-icons-email a, &.social-icons-colored li.social-icons-email a {
+    color: $email;
+  }
+  li:hover.social-icons-vk a, &.social-icons-colored li.social-icons-vk a {
+    color: $vk;
+  }
+  li:hover.social-icons-xing a, &.social-icons-colored li.social-icons-xing a {
+    color: $xing;
+  }
+  li:hover.social-icons-tumblr a, &.social-icons-colored li.social-icons-tumblr a {
+    color: $tumblr;
+  }
+  li:hover.social-icons-reddit a, &.social-icons-colored li.social-icons-reddit a {
+    color: $reddit;
+  }
+  li:hover.social-icons-delicious a, &.social-icons-colored li.social-icons-delicious a {
+    color: $delicious;
+  }
+  li:hover.social-icons-stumbleupon a, &.social-icons-colored li.social-icons-stumbleupon a {
+    color: $stumbleupon;
+  }
+  li:hover.social-icons-digg a, &.social-icons-colored li.social-icons-digg a {
+    color: $digg;
+  }
+  li:hover.social-icons-blogger a, &.social-icons-colored li.social-icons-blogger a {
+    color: $blogger;
+  }
+  li:hover.social-icons-flickr a, &.social-icons-colored li.social-icons-flickr a {
+    color: $flickr;
+  }
+  li:hover.social-icons-vimeo a, &.social-icons-colored li.social-icons-vimeo a {
+    color: $vimeo;
+  }
+  li:hover.social-icons-yahoo a, &.social-icons-colored li.social-icons-yahoo a {
+    color: $yahoo;
+  }
+  li:hover.social-icons-googleplay a, &.social-icons-colored li.social-icons-googleplay a {
+    color: $gplus;
+  }
+  li:hover.social-icons-apple a, &.social-icons-colored li.social-icons-apple a {
+    color: $appstore;
+  }
+  &.social-icons-colored li {
+    &:hover a {
+      color: #999;
+    }
+  }
+}
+
+/* Back to Top */
+#back-to-top {
+  display: none;
+  position: fixed;
+  z-index: 1030;
+  bottom: 8px;
+  right: 10px;
+  background-color: rgba(0, 0, 0, 0.2);
+  text-align: center;
+  color: #fff;
+  font-size: 16px;
+  width: 36px;
+  height: 36px;
+  line-height: 36px;
+  border-radius: 0.25rem;
+  @include transition(all 0.3s ease-in-out);
+  @include box-shadow(0px 5px 15px rgba(0, 0, 0, 0.15));
+  &:hover {
+    background-color: $primary-color;
+	@include box-shadow(0px 5px 15px rgba(0, 0, 0, 0.25));
+	@include transition(all 0.3s ease-in-out);
+  }
+}
+
+@media (max-width: 575px) {
+  #back-to-top {z-index: 1029;}
+}

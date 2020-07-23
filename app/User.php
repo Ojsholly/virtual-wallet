@@ -5,10 +5,12 @@ namespace App;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use BinaryCabin\LaravelUUID\Traits\HasUUID;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
-    use Notifiable;
+    use Notifiable, HasUUID, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -16,7 +18,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'first_name', 'last_name', 'email', 'phone', 'password', 'address', 'dob', 'avatar'
     ];
 
     /**
@@ -36,4 +38,24 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function wallet()
+    {
+        return $this->hasOne('App\Wallet', 'user_id', 'uuid');
+    }
+
+    public function bank_account()
+    {
+        return $this->hasOne('App\Account', 'user_id', 'uuid');
+    }
+
+    public function transactions()
+    {
+        return $this->hasMany('App\Transaction', 'user_id', 'uuid');
+    }
+
+    public function find_by_email($email)
+    {
+        return $this->where('email', $email)->first();
+    }
 }
