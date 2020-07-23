@@ -31,8 +31,8 @@ Route::group(['prefix' => 'profile', 'namespace' => 'Profile'], function () {
 
 Route::group(['prefix' => 'bank-accounts', 'namespace' => 'Account'], function () {
 
-    Route::get('/', 'AccountController@index')->middleware('auth', 'verified');
-    Route::post('/new-account', 'AccountController@store')->middleware('auth', 'verified');
+    Route::get('/', 'AccountController@index')->middleware('auth', 'verified', 'password.confirm');
+    Route::post('/save-bank-account', 'AccountController@store')->middleware('auth', 'verified');
 });
 
 Route::group(['prefix' => 'transactions', 'namespace' => 'Transaction'], function () {

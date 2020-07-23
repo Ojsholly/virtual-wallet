@@ -44,9 +44,9 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasOne('App\Wallet', 'user_id', 'uuid');
     }
 
-    public function bank_accounts()
+    public function bank_account()
     {
-        return $this->hasMany('App\Account', 'user_id', 'uuid');
+        return $this->hasOne('App\Account', 'user_id', 'uuid');
     }
 
     public function transactions()

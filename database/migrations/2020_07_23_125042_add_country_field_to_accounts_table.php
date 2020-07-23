@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddTitleFieldToTransactionsTable extends Migration
+class AddCountryFieldToAccountsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,10 @@ class AddTitleFieldToTransactionsTable extends Migration
      */
     public function up()
     {
-        Schema::table('transactions', function (Blueprint $table) {
+        Schema::table('accounts', function (Blueprint $table) {
             //
-            $table->string('title')->after('type');
+            $table->string('country')->after('user_id');
+            $table->string('account_name')->after('bank_name');
         });
     }
 
@@ -26,10 +27,11 @@ class AddTitleFieldToTransactionsTable extends Migration
      */
     public function down()
     {
-        Schema::table('transactions', function (Blueprint $table) {
+        Schema::table('accounts', function (Blueprint $table) {
             //
 
-            $table->dropColumn('title');
+            $table->dropColumn('country');
+            $table->dropColumn('account_name');
         });
     }
 }

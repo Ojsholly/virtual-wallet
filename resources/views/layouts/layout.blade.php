@@ -24,6 +24,7 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('vendor/font-awesome/css/all.min.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('vendor/bootstrap-select/css/bootstrap-select.min.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('vendor/currency-flags/css/currency-flags.min.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('vendor/owl.carousel/assets/owl.carousel.min.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('css/stylesheet.css') }}" />
     <link rel="stylesheet" type="text/css"
         href="https://cdnjs.cloudflare.com/ajax/libs/jquery-flexdatalist/2.2.4/jquery.flexdatalist.min.css" />
@@ -52,6 +53,7 @@
         <script src="{{ asset('vendor/jquery/jquery.min.js') }}"></script>
         <script src="{{ asset('vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
         <script src="{{ asset('vendor/bootstrap-select/js/bootstrap-select.min.js') }}"></script>
+        <script src="{{ asset('vendor/owl.carousel/owl.carousel.min.js') }}"></script>
         <script src="{{ asset('js/theme.js') }}"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-flexdatalist/2.2.4/jquery.flexdatalist.min.js">
         </script>
@@ -232,6 +234,26 @@
                             }, 1000);
                         }
                     });
+                });
+
+                $('input[type="checkbox"]').click(function () {
+
+                    if ($(this).is(":checked")) {
+
+                        $('#save-account').removeAttr('disabled');
+
+                    } else if ($(this).is(":not(:checked)")) {
+
+                        $('#save-account').attr('disabled', 'disabled');
+
+                    }
+
+                });
+
+                $('#account_bank').change(function () {
+                    var bank_name = $(this).children("option:selected").attr('data-name');
+                    $('#bank_name').val('');
+                    $('#bank_name').val(bank_name);
                 });
 
             });
