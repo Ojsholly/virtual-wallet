@@ -24,7 +24,8 @@ class LogWalletCredit
             'user_id' => Auth::user()->uuid,
             'amount'  => $event->transaction->data->amount,
             'type'   => 'Credit',
-            'narration' => 'Wallet Credit',
+            'title' => 'Wallet Credit',
+            'narration' => 'Deposit into wallet via ' . $event->data->card,
             'status' => 1
         ]);
     }

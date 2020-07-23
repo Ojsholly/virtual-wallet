@@ -26,7 +26,9 @@ class TransactionController extends Controller
     public function index()
     {
         //
-        return view('transactions.transactions-history');
+        $transactions = Transaction::where('user_id', Auth::user()->uuid)->latest()->paginate(15);
+
+        return view('transactions.history', ['transactions' => $transactions]);
     }
 
     /**
@@ -214,7 +216,7 @@ class TransactionController extends Controller
 
             $recipient_data = User::where('uuid', $recipient_uuid)->first();
             // dd($recipient_data->email);
-            $data = (object) ['recipient' => $recipient, 'recipient_uuid' => $recipient_uuid, 'amount' => $amount, 'narration' => $narration];
+            $data = (object) ['recipient' => $recipient, 'recipient_uuid' => $recipient_uuid, 'amount' => $amount, 'narration' => $narration, 'sender' => Auth::user()->first_name . ' ' . Auth::user()->last_name];
 
             $balance = Auth::user()->wallet->balance;
 
