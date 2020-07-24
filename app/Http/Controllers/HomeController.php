@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Transaction;
 use Illuminate\Http\Request;
-use App\Events\NewUserVerifiesEmail;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
@@ -18,6 +17,7 @@ class HomeController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+        $this->middleware('verified');
     }
 
     /**
@@ -27,13 +27,6 @@ class HomeController extends Controller
      */
     public function index(Request $request)
     {
-
-        $wallet = Auth::user()->wallet;
-
-        if (!$wallet) {
-            # code...
-            event(new NewUserVerifiesEmail($request->user()));
-        }
 
         $transactions = Transaction::where('user_id', Auth::user()->uuid)->latest()->get()->take(7);
 
