@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Listeners\LogWalletCredit;
 use App\Listeners\CreateUserWallet;
 use App\Events\NewUserVerifiesEmail;
+use Illuminate\Auth\Events\Verified;
 use App\Events\UserTransferSucessFul;
 use App\Events\WalletCreditValidated;
 use Illuminate\Support\Facades\Event;
@@ -32,7 +33,7 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
-        NewUserVerifiesEmail::class => [
+        Verified::class => [
             CreateUserWallet::class,
             WelcomeNewUserListener::class,
         ],
