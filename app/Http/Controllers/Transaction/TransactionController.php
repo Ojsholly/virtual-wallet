@@ -283,7 +283,7 @@ class TransactionController extends Controller
 
         if (!$account) {
             # code...
-            return view('profile.bank-account')->with('fail', 'Kindly save your bank account to continue.');
+            return view('profile.bank-accounts')->with('fail', 'Kindly save your bank account to continue.');
         }
 
         return view('transactions.withdraw', ['account' => $account]);
