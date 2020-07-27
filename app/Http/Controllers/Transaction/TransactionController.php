@@ -283,7 +283,8 @@ class TransactionController extends Controller
 
         if (!$account) {
             # code...
-            return view('profile.bank-accounts')->with('fail', 'Kindly save your bank account to continue.');
+            $user = Auth::user();
+            return redirect()->action('Account\AccountController@index')->with('fail', 'Kindly save your bank account to continue.');
         }
 
         return view('transactions.withdraw', ['account' => $account]);
