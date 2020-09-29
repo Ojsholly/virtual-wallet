@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Transaction;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
@@ -15,6 +17,7 @@ class HomeController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+        $this->middleware('verified');
     }
 
     /**
@@ -22,10 +25,11 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function index()
+    public function index(Request $request)
     {
-        $user = Auth::user();
 
-        return view('dashboard', ['user' => $user]);
+        $transactions = Transaction::where('user_id', Auth::user()->uuid)->latest()->get()->take(7);
+
+        return view('dashboard', ['transactions' => $transactions]);
     }
 }

@@ -22,9 +22,11 @@ class LogWalletCredit
             'uuid' => $event->transaction->data->id,
             'txn_ref' => $event->transaction->data->tx_ref,
             'user_id' => Auth::user()->uuid,
-            'amount'  => $event->transaction->data->amount,
-            'type'   => 'Credit',
-            'status' => 1
+            'amount' => $event->transaction->data->amount,
+            'type' => 'Credit',
+            'title' => 'Wallet Credit',
+            'narration' => 'Deposit into wallet via ' . $event->transaction->data->card->type,
+            'status' => 1,
         ]);
     }
 }

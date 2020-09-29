@@ -24,7 +24,10 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('vendor/font-awesome/css/all.min.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('vendor/bootstrap-select/css/bootstrap-select.min.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('vendor/currency-flags/css/currency-flags.min.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('vendor/owl.carousel/assets/owl.carousel.min.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('css/stylesheet.css') }}" />
+    <link rel="stylesheet" type="text/css"
+        href="https://cdnjs.cloudflare.com/ajax/libs/jquery-flexdatalist/2.2.4/jquery.flexdatalist.min.css" />
 </head>
 
 <body>
@@ -50,7 +53,10 @@
         <script src="{{ asset('vendor/jquery/jquery.min.js') }}"></script>
         <script src="{{ asset('vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
         <script src="{{ asset('vendor/bootstrap-select/js/bootstrap-select.min.js') }}"></script>
+        <script src="{{ asset('vendor/owl.carousel/owl.carousel.min.js') }}"></script>
         <script src="{{ asset('js/theme.js') }}"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-flexdatalist/2.2.4/jquery.flexdatalist.min.js">
+        </script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
         <script>
             @if(\Request::is('transactions/deposit'))
@@ -118,6 +124,232 @@
                     const amount = $('#deposit-amount').val();
 
                     makePayment(amount);
+                });
+
+                $('.flexdatalist').flexdatalist({
+                    selectionRequired: true,
+                    minLength: 1
+                });
+
+                $('#recipient-email').change(function () {
+                    const recipient_email = $('#recipient-email').val();
+                    const amount = $('#amount').val();
+                    if (recipient_email == '' || amount < 1000) {
+
+                        $('#transfer-confirm-btn').attr('disabled', 'disabled');
+                    }
+                });
+
+                $('#transfer-amount').change(function () {
+                    const amount = $('#transfer-amount').val();
+                    if (amount >= 1000) {
+
+                        $('#transfer-confirm-btn').removeAttr('disabled');
+
+                    } else {
+
+
+                        $('#transfer-confirm-btn').attr('disabled', 'disabled');
+
+                    }
+                });
+
+                $('#confirm-transfer-btn').click(function (e) {
+
+                    e.preventDefault();
+
+                    $(this).attr('disabled', 'disabled');
+
+                    const recipient = $('#recipient').val();
+                    const recipient_uuid = $('#recipient_uuid').val();
+                    const amount = $('#amount').val();
+                    const narration = $('#narration').val();
+
+                    console.log(amount + " " + narration);
+
+                    $.ajax({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        url: '{{ url("transactions/transfer-money") }}',
+                        type: 'POST',
+                        data: {
+                            recipient: recipient,
+                            recipient_uuid: recipient_uuid,
+                            amount: amount,
+                            narration: narration
+                        },
+                        beforeSend: function () {
+                            Swal.fire({
+                                title: 'Processing Transfer',
+                                onBeforeOpen: () => {
+                                    Swal.showLoading()
+                                },
+                            });
+                        },
+                        success: function (data) {
+                            //stuff
+                            Swal.close();
+
+                            if (data.status == 1) {
+                                setTimeout(function () {
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'Success!',
+                                        text: data.msg,
+                                        timer: 100000
+                                    }).then((value) => {}).catch(swal.noop)
+                                }, 1000);
+
+                                setTimeout(function () {
+                                    window.location = '{{ url("/dashboard") }}';
+                                }, 5000);
+
+                            } else {
+                                Swal.close()
+                                setTimeout(function () {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Oops!',
+                                        text: data.msg,
+                                        timer: 50000
+                                    }).then((value) => {}).catch(swal.noop)
+                                }, 1000);
+
+                                setTimeout(function () {
+                                    window.location =
+                                        '{{ url("/transactions/transfer") }}';
+                                }, 5000);
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            //other stuff
+                            Swal.close();
+                            console.log(xhr.responseJSON.message);
+                            setTimeout(function () {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error ' + xhr.status,
+                                    text: xhr.responseJSON.message,
+                                    timer: 50000
+                                }).then((value) => {}).catch(swal.noop)
+                            }, 1000);
+
+                            $(this).removeAttr('disabled');
+                        }
+                    });
+                });
+
+                $('input[type="checkbox"]').click(function () {
+
+                    if ($(this).is(":checked")) {
+
+                        $('#save-account').removeAttr('disabled');
+
+                    } else if ($(this).is(":not(:checked)")) {
+
+                        $('#save-account').attr('disabled', 'disabled');
+
+                    }
+
+                });
+
+                $('#account_bank').change(function () {
+                    var bank_name = $(this).children("option:selected").attr('data-name');
+                    $('#bank_name').val('');
+                    $('#bank_name').val(bank_name);
+                });
+
+                $('#withdraw-amount').change(function () {
+                    const amount = $('#withdraw-amount').val();
+                    if (amount >= 1000) {
+                        $('#withdraw-btn').removeAttr('disabled');
+                    } else {
+                        $('#withdraw-btn').attr('disabled', 'disabled');
+                    }
+                });
+
+                $('#confirm-withdrawal').click(function (e) {
+                    e.preventDefault();
+
+                    const amount = $('#amount').val();
+                    const account_number = $('#account_number').val();
+                    const account_uuid = $('#account_uuid').val();
+                    const account_bank = $('#account_bank').val();
+                    const account_name = $('#account_name').val();
+
+                    $.ajax({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        url: '{{ url("transactions/withdraw-money") }}',
+                        type: 'POST',
+                        data: {
+                            account_number: account_number,
+                            account_uuid: account_uuid,
+                            amount: amount,
+                            account_bank: account_bank,
+                            account_name: account_name
+                        },
+                        beforeSend: function () {
+                            Swal.fire({
+                                title: 'Processing Withdrawal',
+                                onBeforeOpen: () => {
+                                    Swal.showLoading()
+                                },
+                            });
+                        },
+                        success: function (data) {
+                            //stuff
+                            Swal.close();
+
+                            if (data.status == 1) {
+                                setTimeout(function () {
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'Success!',
+                                        text: data.msg,
+                                        timer: 100000
+                                    }).then((value) => {}).catch(swal.noop)
+                                }, 1000);
+
+                                setTimeout(function () {
+                                    window.location = '{{ url("/dashboard") }}';
+                                }, 5000);
+
+                            } else {
+                                Swal.close()
+                                setTimeout(function () {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Oops!',
+                                        text: data.msg,
+                                        timer: 50000
+                                    }).then((value) => {}).catch(swal.noop)
+                                }, 1000);
+
+                                setTimeout(function () {
+                                    window.location =
+                                        '{{ url("/transactions/withdraw") }}';
+                                }, 500000);
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            //other stuff
+                            Swal.close();
+                            console.log(xhr.responseJSON.message);
+                            setTimeout(function () {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error ' + xhr.status,
+                                    text: xhr.responseJSON.message,
+                                    timer: 50000
+                                }).then((value) => {}).catch(swal.noop)
+                            }, 1000);
+
+                            $(this).removeAttr('disabled');
+                        }
+                    });
                 });
 
             });

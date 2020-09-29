@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Account extends Model
 {
+    protected $guarded = [];
     //
     use SoftDeletes, HasUUID;
 

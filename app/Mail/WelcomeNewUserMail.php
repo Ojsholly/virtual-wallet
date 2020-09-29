@@ -23,6 +23,7 @@ class WelcomeNewUserMail extends Mailable
     {
         //
         $this->user = $user;
+        $this->subject('Welcome to Virtual Wallet');
     }
 
     /**

@@ -26,7 +26,6 @@
                             <li><a href="{{ url('profile/'.Auth::user()->uuid) }}">Profile</a></li>
                             <li><a href="{{ url('transactions/') }}">Transactions</a></li>
                             <li><a href="{{ url('transactions/transfer') }}">Send Money</a></li>
-                            <li><a href="{{ url('activity-log') }}">Activity Log</a></li>
                         </ul>
                     </div>
                 </nav>
@@ -53,9 +52,10 @@
           ============================== -->
                 <nav class="login-signup navbar navbar-expand">
                     <ul class="navbar-nav">
-                        <li><a href="profile.html">Register</a> </li>
+                        <li><a href="{{ route('register') }}">Register</a> </li>
                         <li class="align-items-center h-auto ml-sm-3"><a
-                                class="btn btn-outline-primary shadow-none d-none d-sm-block">Sign in</a></li>
+                                class="btn btn-outline-primary shadow-none d-none d-sm-block"
+                                href="{{ route('login') }}">Sign in</a></li>
                     </ul>
                 </nav>
                 <!-- Login & Signup Link end -->

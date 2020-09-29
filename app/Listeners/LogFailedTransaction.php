@@ -23,6 +23,8 @@ class LogFailedTransaction
             'user_id' => Auth::user()->uuid,
             'amount' => $event->response->amount,
             'type' => 'Credit',
+            'title' => 'Wallet Deposit',
+            'narration' => 'Failed Deposit Attempt',
             'status' => 0
         ]);
     }

@@ -11,6 +11,7 @@
         <ul class="nav secondary-nav alternate">
             <li class="nav-item"> <a class="nav-link active" href="{{ url('transactions/deposit') }}">Deposit</a></li>
             <li class="nav-item"> <a class="nav-link" href="{{ url('transactions/withdraw') }}">Withdraw</a></li>
+            <li class="nav-item"> <a class="nav-link" href="{{ url('transactions/transfer') }}">Transfer</a></li>
         </ul>
     </div>
 </div>

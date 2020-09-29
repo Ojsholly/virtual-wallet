@@ -7,10 +7,21 @@ use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use GuzzleHttp\Exception\ClientException;
+use Illuminate\Support\Facades\Validator;
+use GuzzleHttp\Exception\ConnectException;
+use GuzzleHttp\Exception\RequestException;
 
 
 class AccountController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+        $this->middleware('verified');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -19,11 +30,26 @@ class AccountController extends Controller
     public function index()
     {
         //
-        $accounts = Account::where('uuid', Auth::user()->uuid)->get();
+        $account = Auth::user()->bank_account;
 
-        $banks = $this->fetch_banks('NG');
+        $fetch_banks = $this->fetch_banks('NG');
 
-        return view('profile.bank-accounts', ['accounts' => $accounts]);
+        $fetch_banks = (object) $fetch_banks;
+
+        return view('profile.bank-accounts', ['account' => $account, 'fetch_banks' => $fetch_banks]);
+    }
+
+
+    protected function validator($request)
+    {
+        return Validator::make($request, [
+            'remember' => ['required'],
+            'country' => ['required', 'string'],
+            'account_bank' => ['required', 'numeric'],
+            'account_name' => ['required', 'string'],
+            'bank_name' => ['required', 'string'],
+            'account_number' => ['required', 'string']
+        ]);
     }
 
     /**
@@ -39,10 +65,9 @@ class AccountController extends Controller
     public function fetch_banks($country)
     {
         $client = new Client();
-
         $base_url = "https://api.flutterwave.com/v3/banks/" . $country;
 
-        $token = env('RAVE_SECRET_KEY');
+        $token = env('RAVE_TEST_SECRET_KEY');
 
         $headers = [
             'Content-Type'        => 'application/json',
@@ -50,15 +75,26 @@ class AccountController extends Controller
             'Authorization' => 'Bearer ' . $token
         ];
 
-        $params = [
-            'public_key' => env('RAVE_PUBLIC_KEY')
-        ];
+        try {
 
-        $request = $client->get($base_url, [
-            'headers' => $headers
-        ]);
+            $request = $client->get($base_url, [
+                'headers' => $headers
+            ]);
 
-        dd($request->getBody());
+            $list = $request->getBody()->getContents();
+
+            return ['status' => $request->getStatusCode(), 'list' => $list];
+        } catch (ClientException $e) {
+            if ($e->hasResponse()) {
+                $message = json_decode($e->getResponse()->getBody());
+                $status_code = $e->getResponse()->getStatusCode();
+                return ['status' => $status_code, 'error' => $message];
+            }
+        } catch (ConnectException $e) {
+            return ['status' => 400, 'error' => 'Poor Network Connection. System unable to fetch supported banks.'];
+        } catch (RequestException $e) {
+            return ['status' => 400, 'error' => 'Request timeout. Fetching of supported banks failed.'];
+        }
     }
 
     /**
@@ -70,6 +106,21 @@ class AccountController extends Controller
     public function store(Request $request)
     {
         //
+
+        $this->validator($request->all());
+
+        $request->input('user_id', Auth::user()->uuid);
+
+        $request->merge(['user_id' => auth()->user()->uuid]);
+
+        $create_account = Account::updateOrCreate(['user_id' => Auth::user()->uuid], $request->except('confirm'));
+
+        if ($create_account) {
+            # code...
+            return redirect()->back()->with('success', 'Bank Account Successfully Saved.');
+        }
+
+        return redirect()->back()->with('fail', 'Error saving bank account. Please try again later.');
     }
 
     /**
